@@ -1,0 +1,192 @@
+<!--
+ Kreda-Mobile Webapplication for Smartphones and Tablets to access Kreda
+ Copyright (C) 2014  Kilian Ulrichsohn
+ This Source was puplished under the Kreda-Mobile License.
+ You should find a version of the license in a file called "LICENSE".
+-->
+<!DOCTYPE HTML>
+<html manifest="kreda-mobile.appcache">
+	<head>
+		<title>Kreda Mobile</title>
+        <meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="text/javascript" src="jquery-2.1.0.js"></script>
+		<script type="text/javascript" src="jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<script type="text/javascript" src="jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+        <script type="text/javascript" src="jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="querydb.js"></script>
+		<script type="text/javascript" src="kreda-lib.js"></script>
+        <script type="text/javascript" src="kreda-statics.js"></script>
+        <script type="text/javascript" src="kreda-init.js"></script>
+        <script type="text/javascript">
+            kreda.cfg.schooldevice = false;
+        </script>
+        <script type="text/javascript" src="../javascript/ASCIIMathML.js"></script>
+        <script type="text/javascript">
+            <!--
+            // AsciiMathML
+            decimalsign = ",";
+            mathcolor = " ";
+            notifyIfNoMathML = false;
+            translateOnLoad = true;
+            -->
+        </script>
+		<link rel="stylesheet" href="jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
+		<link rel="stylesheet" href="jquery-ui-1.10.4.custom/css/no-theme/jquery-ui-1.10.4.custom.min.css" />
+		<link rel="stylesheet" href="kreda-icons.css" />
+		<link rel="stylesheet" href="kreda-mobile.css" />
+	</head>
+	<body>
+		<div data-role="page" data-theme="b" id="home">
+
+			<div data-role="panel" data-position-fixed="true" data-display="overlay" data-theme="b" data-position="left" id="left-panel-menu">
+				<div data-role="controlgroup">
+					<a href="javascript:kreda.ui.sitzplan.showEdit()" data-rel="popup" class="ui-btn ui-icon-kreda-sitzplan ui-btn-icon-left" >Sitzplan</a>
+					<a href="#" class="ui-btn ui-icon-kreda-zensuren ui-btn-icon-left" >Zensuren</a>
+					<a href="#" class="ui-btn ui-icon-kreda-statistik ui-btn-icon-left" >Statistik</a>
+					<a href="javascript:kreda.ui.displayStoffverteilung()" class="ui-btn ui-icon-kreda-arrow_join ui-btn-icon-left" >Stoffverteilung</a>
+					<a href="javascript:kreda.ui.sitzplan.showFehlend()" class="ui-btn ui-icon-kreda-fehlzeit ui-btn-icon-left" >Fehlzeiten</a>
+					<a href="#" class="ui-btn ui-icon-kreda-schueler ui-btn-icon-left" >Schüler/Eltern</a>
+				</div>
+				<h4>Allgemein</h4>
+				<div data-role="controlgroup">
+					<a href="#" class="ui-btn ui-icon-kreda-note ui-btn-icon-left" >Notizen</a>
+					<a href="javascript:kreda.ui.contentPopup.show('stundenplan', true)" class="ui-btn ui-icon-kreda-stundenplan ui-btn-icon-left" >Stundenplan</a>
+					<a href="#" class="ui-btn ui-icon-kreda-konferenz ui-btn-icon-left" >Dienstberatung</a>
+					<a href="#" class="ui-btn ui-icon-kreda-kollegen ui-btn-icon-left" >Kollegen</a>
+					<a href="javascript:kreda.transfer.upload();" class="ui-btn ui-icon-kreda-backup ui-btn-icon-left" >Export</a>
+                    <a href="javascript:kreda.transfer.loadContent('../offline/export_to_mobile.php');" class="ui-btn ui-icon-kreda-down ui-btn-icon-left" >DB Importieren</a>
+				</div>
+                <h4>Debug</h4>
+                <div data-role="controlgroup">
+                    <a href="javascript:kreda.storage.dropDB();" class="ui-btn ui-icon-kreda-entfernen ui-btn-icon-left" >drop database</a>
+                    <a href="javascript:defaultContent();" class="ui-btn ui-icon-kreda-down ui-btn-icon-left" >Beispiel Inhalt</a>
+                    <a href="javascript:kreda.transfer.loadContent('content.json');" class="ui-btn ui-icon-kreda-down ui-btn-icon-left" >content.json</a>
+                </div>
+			</div>
+
+            <div data-role="panel" data-position-fixed="true" data-display="overlay" data-position="right" id="right-panel-menu">
+                <ul data-role="controlgroup">
+                    <li data-role="collapsible" data-iconpos="right" data-inset="false" data-collapsed="false">
+                        <h2>Unterrichtsstunden</h2>
+                        <ul data-role="listview" id="stundenmenu">
+                        </ul>
+                    </li>
+                    <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                        <h2>Fach-Klassen</h2>
+                        <ul data-role="listview" id="fachklassemenu">
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+			<div data-role="header" data-position="fixed" class="header">
+				<div class="ui-btn-inline ui-btn-left">
+					<a href="#left-panel-menu" class="ui-btn ui-btn-icon-left ui-icon-grid" data-role="button">Menü</a>
+                    <div class="kreda-fehlend ui-btn-inline ui-icon-kreda-fehlzeit">5</div>
+                    <div class="kreda-fehlend ui-btn-inline ui-icon-kreda-hausaufgaben"></div>
+                    <div class="kreda-fehlend ui-btn-inline ui-icon-kreda-test"></div>
+                    <div class="kreda-fehlend ui-btn-inline ui-icon-kreda-schuelerliste">2</div>
+				</div>
+				<h1 id="title">
+                    Kreda
+				</h1>
+				
+				<div data-role="controlgroup" data-type="horizontal" class="ui-btn-inline ui-btn-right">
+					<a href="#popup-randschueler" data-rel="popup" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-filter" data-role="button" > </a>
+					<a href="#" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-note" data-role="button" > </a>
+					<a href="#" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-mitarbeit" data-role="button" > </a>
+					<a href="#" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-verwarnung" data-role="button" > </a>
+					<a href="#popup-progress" data-rel="popup" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-kommentar" data-role="button" > </a>
+					<a href="#right-panel-menu" class="ui-btn ui-btn-icon-left ui-icon-gear" data-role="button" > Ustd.</a>
+				</div>
+
+			</div>
+
+			<div role="main" class="ui-content">
+                <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-fehlzeit ui-btn-icon-left" data-role="button" >Fehlzeiten</a>
+                <div data-role="controlgroup" data-type="horizontal" id="hausaufgaben">
+                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-hausaufgaben ui-btn-icon-left kreda-controlgroup" data-role="button" >EdM5 S. 170/12 - 15.3. <span class="fehlend">5</span>  <span class="fertig">19</span></a>
+                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-hausaufgaben ui-btn-icon-left kreda-controlgroup" data-role="button" >Schülerbeobachtungen - 12.3.</a>
+                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-hausaufgaben ui-btn-icon-left kreda-controlgroup" data-role="button" >neu</a>
+                </div>
+
+                <div data-role="controlgroup" data-type="horizontal" id="tests">
+                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-test ui-btn-icon-left kreda-controlgroup" data-role="button" >KA Addition zur&uuml;ckgeben</a>
+                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-test ui-btn-icon-left kreda-controlgroup" data-role="button" >LK Natürliche Zahlen - 10.3. <span class="fehlend">20</span>  <span class="fertig">3</span></a>
+                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-test ui-btn-icon-left kreda-controlgroup" data-role="button" >neu</a>
+                </div>
+
+                <div data-role="controlgroup" data-type="horizontal" id="listen">
+                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-schuelerliste ui-btn-icon-left kreda-controlgroup" data-role="button" >Versetzung <span class="fehlend">2</span>  <span class="fertig">6</span></a>
+                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-schuelerliste ui-btn-icon-left kreda-controlgroup" data-role="button" >TdoT - 20.3. <span class="fehlend">2</span>  <span class="fertig">26</span></a>
+                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-schuelerliste ui-btn-icon-left kreda-controlgroup" data-role="button" >neu</a>
+                </div>
+
+                <div class="kreda-dieseStunde-rendered">
+
+                </div>
+
+                <div class="kreda-pre-rendered" data-content-id="hello-world"></div>
+		    </div>
+
+            <div data-role="popup" data-position-to="window" id="popup-sitzplan" class="kreda-popup kreda-popup-sitzplan">
+                <div class="kreda-sitzplan">
+                    <div class="ui-grid-a" id="ablage">
+                        <div class="inner">
+                        </div>
+                    </div>
+                    <div id="sitzplan" class="kreda-pre-rendered" data-content-id="sitzplan-0">
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $(document).on('pageinit', function(){
+                        kreda.ui.sitzplan.ablage = $('#ablage>.inner');
+                        kreda.ui.sitzplan.sitzplan = $('#sitzplan');
+                        kreda.ui.sitzplan.popup = $("#popup-sitzplan");
+                        kreda.ui.sitzplan.popup.on({
+                            popupafterclose: function(event, ui) {
+                                kreda.event.callevent("popup-sitzplan-closed");
+                            }
+                        });
+                    });
+
+                </script>
+            </div>
+			<div data-role="popup" data-position-to="window" id="popup-randschueler" class="kreda-popup kreda-popup-randschueler">
+				<script type="text/javascript">
+					$(document).on('pageinit', function(){
+						$( "#popup-randschueler" ).popup({
+							afteropen: function(event, ui) {
+								kreda.ui.randSchueler($('#popup-randschueler'));
+							}
+						});
+					});
+				</script>
+			</div>
+            <div data-role="popup" data-position-to="window" id="popup-progress" class="kreda-popup kreda-popup-progress">
+                <div class="title">Daten werden gespeichert</div>
+                <div class="progress-outer">
+                    <div class="progress-inner" id="content-transfer-progressbar"></div>
+                </div>
+                <div class="progress-zeit" id="content-transfer-zeit">
+                    verstrichene Zeit:
+                </div>
+            </div>
+            <div data-role="popup" data-position-to="window" id="popup-error" class="kreda-popup kreda-popup-error">
+                <div class="title">Es ist ein Fehler aufgetreten!</div>
+                <textarea class="exception"></textarea>
+            </div>
+            <div data-role="popup" data-position-to="window" id="popup-var-content" class="kreda-popup kreda-popup-var-content kreda-pre-rendered" data-content-id="">
+
+            </div>
+            <div class="kreda-footer">
+                <div class="author">© Kilian Ulrichsohn</div>
+                <div class="version-outer">
+                    <div class="version-inner">Kreda Mobile pre-release</div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

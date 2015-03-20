@@ -1,0 +1,19 @@
+TODO:
+	-   Log-Level
+	-	Notizen
+	-	Fehlstunden
+
+Known Bugs:
+
+Done:
+	-	postition von abschnitten toleranter gestalten (auslassungen gestatten)
+	-	Abschnittsplanung mit Fremdschlüssel 0
+	-	Titel aktualisieren wenn ein neue Stunde geladen wird
+	-	Zufalls Schüler
+	-	Fix progressTick()
+	-	Progressbar Import
+	-	Menü neuinitialisieren
+	-	renderSitzplan evtl. entfernen
+	-	Stunden im Menü sortieren
+	-	Stundenplan
+	-	Content Popup: erst warten bis inhalt initialisiert wurde

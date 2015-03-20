@@ -1,0 +1,57 @@
+                   Kreda-Mobile Lizenz 04.12.2015
+
+                             VORWORT
+
+Wenn sie die folgenden Bedingungen nicht akzeptieren, so dürfen Sie
+die Software nicht nutzen. Um eine Außnahmeregelung zu erbitten
+kontaktieren Sie bitte <gustavfb@yahoo.de>.
+Bitte beachten: Einige Dateien stehen unter anderen Lizenzen,
+beachten Sie daher den Lizenzhinweis am Anfang einer jeder Datei.
+
+                      REGELN UND BEDINGUNGEN
+ 0. Definitionen
+"Autor" meint den, bzw. die Autoren. Ein Autor kann auch eine
+juristische Person sein.
+"Software" bezeichnet alle HTML, JS und CSS Dateien, die Teil des
+Kreda-Mobile Projektes sind. jQuery und alle jQuery Erweiterungen
+ gehören nicht dazu.
+"von Menschen lesbar" meint den Quelltext, den die Entwickler
+geschrieben haben. Das bedeutet, dass komprimierter Code nicht
+zulässig ist.
+"weitergeben" meint Veröffentlichungen und Weitergabe jeder Art.
+Auch die Bereitstellung auf einem Web-Server ist eine Weitergabe
+"Kopie" meint auch die temporären Daten, die der Browser zwischen-
+speichert.
+
+ 1. Allgemeines
+Sie dürfen die Software nutzen und unverändert weiterverbreiten,
+auch kommerziell. Die Software darf nur unter dieser Lizenz weiter
+gegeben werden.
+
+ 2. Änderungen
+Sie dürfen die Software ändern. Sie dürfen jedoch nicht den Hinweis
+auf den Autor im Fußbereich der Seite entfernen. Trotz Änderungen
+muss der Name des Autors immer gut lesbar bleiben. Der Fußbereich
+der Seite muss sichtbar sein und darf nicht automatisiert ausge-
+blendet werden.
+
+ 3. Weitergabe von geänderter Software
+Kreda Mobile darf unter folgenden Bedingungen geändert weitergegeben
+werden:
+  -  die Änderungen dürfen die Kreda-Mobile Lizenz nicht verletzen.
+  -  die Lizenz, unter der das geänderte Produkt veröffentlicht wird,
+     darf dieser nicht widersprechen.
+  -  jeder der eine Kopie der Software erhält muss Zugang zu dem
+     vollständigen von Menschen lesbaren Quelltext haben.
+  -  es dürfen weitere Autoren im Fußbereich genannt, jedoch
+     keine entfernt werden.
+
+ 4. Einbindung der Javascriptdateien in anderen Projekten
+Wird aus einer anderen Anwendung/Webseite Quelldateien dieser
+Software eingebunden, so muss im Footer der Anwendung/Webseite ein
+Hinweis auf den Autor angelegt werden.
+
+ 5. Haftungsausschluss
+Der Autor übernimmt keine Haftung für enstehende Schäden jeglicher
+Art, die durch den Einsatz dieser Software entstehen. Des Weiteren
+gibt der Autor keine Garantie für die Fehlerfreiheit der Software.
