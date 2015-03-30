@@ -12,7 +12,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="jquery-2.1.0.js"></script>
 		<script type="text/javascript" src="jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
-		<script type="text/javascript" src="jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+		<script type="text/javascript" src="jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
         <script type="text/javascript" src="jquery.ui.touch-punch.min.js"></script>
         <script type="text/javascript" src="querydb.js"></script>
 		<script type="text/javascript" src="kreda-lib.js"></script>
@@ -32,7 +32,7 @@
             -->
         </script>
 		<link rel="stylesheet" href="jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
-		<link rel="stylesheet" href="jquery-ui-1.10.4.custom/css/no-theme/jquery-ui-1.10.4.custom.min.css" />
+		<link rel="stylesheet" href="jquery-ui-1.11.4.custom/jquery-ui.structure.min.css" />
 		<link rel="stylesheet" href="kreda-icons.css" />
 		<link rel="stylesheet" href="kreda-mobile.css" />
 	</head>
@@ -97,7 +97,7 @@
 					<a href="#" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-note" data-role="button" > </a>
 					<a href="#" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-mitarbeit" data-role="button" > </a>
 					<a href="#" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-verwarnung" data-role="button" > </a>
-					<a href="#popup-progress" data-rel="popup" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-kommentar" data-role="button" > </a>
+					<a href="#" data-rel="popup" class="ui-btn ui-btn-icon-notext kreda-querformat ui-icon-kreda-kommentar" data-role="button" > </a>
 					<a href="#right-panel-menu" class="ui-btn ui-btn-icon-left ui-icon-gear" data-role="button" > Ustd.</a>
 				</div>
 
@@ -108,7 +108,7 @@
                 <div data-role="controlgroup" data-type="horizontal" id="hausaufgaben">
                     <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-hausaufgaben ui-btn-icon-left kreda-controlgroup" data-role="button" >EdM5 S. 170/12 - 15.3. <span class="fehlend">5</span>  <span class="fertig">19</span></a>
                     <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-hausaufgaben ui-btn-icon-left kreda-controlgroup" data-role="button" >Schülerbeobachtungen - 12.3.</a>
-                    <a href="#" class="ui-btn ui-corner-all ui-icon-kreda-hausaufgaben ui-btn-icon-left kreda-controlgroup" data-role="button" >neu</a>
+                    <a href="javascript:kreda.ui.neueHausaufgabe.open()" class="ui-btn ui-corner-all ui-icon-kreda-hausaufgaben ui-btn-icon-left kreda-controlgroup" data-role="button">neu</a>
                 </div>
 
                 <div data-role="controlgroup" data-type="horizontal" id="tests">
@@ -130,7 +130,7 @@
                 <div class="kreda-pre-rendered" data-content-id="hello-world"></div>
 		    </div>
 
-            <div data-role="popup" data-position-to="window" id="popup-sitzplan" class="kreda-popup kreda-popup-sitzplan">
+            <div data-history="false" data-role="popup" data-position-to="window" id="popup-sitzplan" class="kreda-popup kreda-popup-sitzplan">
                 <div class="kreda-sitzplan">
                     <div class="ui-grid-a" id="ablage">
                         <div class="inner">
@@ -140,8 +140,8 @@
                     </div>
                 </div>
                 <script type="text/javascript">
-                    $(document).on('pageinit', function(){
-                        kreda.ui.sitzplan.ablage = $('#ablage>.inner');
+                    $(document).on('pageinit', function() {
+                        kreda.ui.sitzplan.ablage = $('#ablage').find('>.inner');
                         kreda.ui.sitzplan.sitzplan = $('#sitzplan');
                         kreda.ui.sitzplan.popup = $("#popup-sitzplan");
                         kreda.ui.sitzplan.popup.on({
@@ -153,7 +153,7 @@
 
                 </script>
             </div>
-			<div data-role="popup" data-position-to="window" id="popup-randschueler" class="kreda-popup kreda-popup-randschueler">
+			<div data-history="false" data-role="popup" data-position-to="window" id="popup-randschueler" class="kreda-popup kreda-popup-randschueler">
 				<script type="text/javascript">
 					$(document).on('pageinit', function(){
 						$( "#popup-randschueler" ).popup({
@@ -164,7 +164,7 @@
 					});
 				</script>
 			</div>
-            <div data-role="popup" data-position-to="window" id="popup-progress" class="kreda-popup kreda-popup-progress">
+            <div data-history="false" data-role="popup" data-position-to="window" id="popup-progress" class="kreda-popup kreda-popup-progress">
                 <div class="title">Daten werden gespeichert</div>
                 <div class="progress-outer">
                     <div class="progress-inner" id="content-transfer-progressbar"></div>
@@ -173,11 +173,28 @@
                     verstrichene Zeit:
                 </div>
             </div>
-            <div data-role="popup" data-position-to="window" id="popup-error" class="kreda-popup kreda-popup-error">
+            <div data-history="false" data-role="popup" data-position-to="window" id="popup-error" class="kreda-popup kreda-popup-error">
                 <div class="title">Es ist ein Fehler aufgetreten!</div>
                 <textarea class="exception"></textarea>
             </div>
-            <div data-role="popup" data-position-to="window" id="popup-var-content" class="kreda-popup kreda-popup-var-content kreda-pre-rendered" data-content-id="">
+            <div data-history="false" data-role="popup" data-position-to="window" id="popup-new-homework" class="">
+                <div data-role="header">
+                    <h1>Hausaufgabe erstellen</h1>
+                </div>
+                <div data-role="main" class="ui-content">
+                    <div id="datepicker"></div>
+                    <label for="aufgabe">Aufgabe:</label>
+                    <textarea id="aufgabe"></textarea>
+                    <a href="javascript:kreda.ui.neueHausaufgabe.save();" class="ui-btn ui-icon-check ui-btn-icon-left">Okay</a>
+                    <a href="javascript:kreda.ui.neueHausaufgabe.close();" class="ui-btn ui-icon-delete ui-btn-icon-left">Abbrechen</a>
+                </div>
+                <script>
+                    $( "#datepicker" ).datepicker({
+                        inline: true
+                    });
+                </script>
+            </div>
+            <div data-history="false" data-role="popup" data-position-to="window" id="popup-var-content" class="kreda-popup kreda-popup-var-content kreda-pre-rendered" data-content-id="">
 
             </div>
             <div class="kreda-footer">

@@ -471,7 +471,7 @@ var kreda = {
                     html += kreda.storage.dieseStunde.hausaufgaben[hausaufgabe].ziel;
                     html += "</a>";
                 }
-                html += "<a href=\"#\" class=\"ui-btn ui-corner-all ui-icon-kreda-hausaufgaben ui-btn-icon-left kreda-controlgroup\" data-role=\"button\" >neu</a>";
+                html += "<a href=\"javascript:kreda.ui.neueHausaufgabe.open()\" class=\"ui-btn ui-corner-all ui-icon-kreda-hausaufgaben ui-btn-icon-left kreda-controlgroup\" data-role=\"button\">neu</a>";
                 return html;
             },
             displayHausaufgaben: function() {
@@ -527,6 +527,44 @@ var kreda = {
             },
             close: function() {
                 $("#popup-var-content").popup("close");
+            }
+        },
+        /**
+         * @namespace
+         */
+        neueHausaufgabe: {
+            open: function() {
+                $('#popup-new-homework').popup('open');
+            },
+            close: function() {
+                $('#popup-new-homework').popup('close');
+            },
+            save: function() {
+                if(kreda.storage.dieseStunde.fachklasse.id != null) {
+                    var popup = $('#popup-new-homework');
+                    var datepicker = $('#datepicker');
+                    var h = new kreda.storage.store.hausaufgabe();
+                    h.abgabedatum = datepicker.datepicker("getDate").getTime();
+                    h.aufgegeben_am = Date.now();
+                    h.fachklasse = kreda.storage.dieseStunde.fachklasse.id;
+                    h.ziel = $('#aufgabe').val();
+                    h.kontrolliert = false;
+                    h.plan = kreda.storage.dieseStunde.plan.id;
+                    delete h.id;
+                    var t = kreda.storage.idb.transaction("hausaufgabe", "readwrite").objectStore("hausaufgabe").add(h);
+                    t.onsuccess = function(e) {
+                        kreda.storage.store.changes.saveQuiet("hausaufgabe", e.target.result, kreda.storage.store.changes.NEU);
+                    };
+                    t.onerror = function(e) {
+                        console.log(e.target);
+                    };
+                    kreda.ui.neueHausaufgabe.clean();
+                }
+
+            },
+            clean: function() {
+                $('#aufgabe').val("");
+                $('#datepicker').datepicker("");
             }
         }
     },
@@ -587,8 +625,8 @@ var kreda = {
             kreda.storage.createStore(idb, {name: "abschnittsplanung", keyPath: "id"}, ["abschnitt", "plan", "minuten", "position", "bemerkung"]);
             kreda.storage.createStore(idb, {name: "abschnitt", keyPath: "id"}, ["value", "nachbereitung", "minuten", "hefter"]);
             kreda.storage.createStore(idb, {name: "plan", keyPath: "id"}, ["datum", "schuljahr", "fachklasse", "nachbereitung", "zusatzziele", "gedruckt", "material_da", "ausfallgrund", "notizen", "vorbereitet", "bemerkung", "ustd", "alternativtitel", "struktur", "ueberschriftsbeginn", "ohne_pause", {key: "abschnittsplaene", param: {multientry: true}}]);
-            kreda.storage.createStore(idb, {name: "hausaufgabe", keyPath: "id"}, ["ziel", "bemerkung", "abgabedatum", "kontrolliert", "plan", "aufgegeben_am", "fachklasse", "mitzaehlen", "value"]);
-            kreda.storage.createStore(idb, {name: "hausaufgabe_vergessen", keyPath: "id"}, ["hausaufgabe", "schueler", "anzahl", "bemerkung", "erledigt"]);
+            kreda.storage.createStore(idb, {name: "hausaufgabe", keyPath: "id", autoIncrement: true}, ["ziel", "bemerkung", "abgabedatum", "kontrolliert", "plan", "aufgegeben_am", "fachklasse", "mitzaehlen", "value"]);
+            kreda.storage.createStore(idb, {name: "hausaufgabe_vergessen", keyPath: "id", autoIncrement: true}, ["hausaufgabe", "schueler", "anzahl", "bemerkung", "erledigt"]);
             kreda.storage.createStore(idb, {name: "pictures", keyPath: "id"}, ["image", "imgtype"]);
             kreda.storage.createStore(idb, {name: "schueler_fehlt", keyPath: "id", autoIncrement: true}, ["schueler", "stunde", "entschuldigt"]);
             kreda.storage.createStore(idb, {name: "changes", keyPath: "id", autoIncrement: true}, ["store", "primary", "state"]);
@@ -796,7 +834,7 @@ var kreda = {
                 q.onFinish(function() {
                     kreda.event.callevent('hausaufgaben-geladen');
                 });
-                q.get("hausaufgabe", {aufgegeben_am: Date.now(), kontrolliert: false});
+                q.get("hausaufgabe", {aufgegeben_am: {"<": Date.now()}, kontrolliert: false});
                 //var handler = kreda.storage.idb.transaction('hausaufgabe', 'readonly').objectStore('hausaufgabe').openCursor();
                 //kreda.storage.dieseStunde.hausaufgaben = [];
                 //handler.onsuccess = function(e) {
@@ -1153,7 +1191,7 @@ var kreda = {
              * @class
              */
             hausaufgabe_vergessen: function () {
-                this.hausaufgabe = null;
+                this.neueHausaufgabe = null;
                 this.schueler = null;
                 this.anzahl = null;
                 this.bemerkung = null;
